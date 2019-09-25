@@ -1,4 +1,5 @@
 #include "TextSourceDataModel.hpp"
+#include <QDebug>
 
 TextSourceDataModel::
 TextSourceDataModel()
@@ -22,7 +23,7 @@ nPorts(PortType portType) const
       break;
 
     case PortType::Out:
-      result = 1;
+      result = 3;
 
     default:
       break;
@@ -38,7 +39,9 @@ onTextEdited(QString const &string)
 {
   Q_UNUSED(string);
 
-  Q_EMIT dataUpdated(0);
+  for (int i =0; i<3; i++) {
+    Q_EMIT dataUpdated(i);
+  }
 }
 
 
@@ -52,7 +55,8 @@ dataType(PortType, PortIndex) const
 
 std::shared_ptr<NodeData>
 TextSourceDataModel::
-outData(PortIndex)
+outData(PortIndex port_index)
 {
+  qDebug() << "output port index is :" << port_index;
   return std::make_shared<TextData>(_lineEdit->text());
 }

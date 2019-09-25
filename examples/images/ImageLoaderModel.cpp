@@ -1,5 +1,7 @@
+#include <unistd.h>
 #include "ImageLoaderModel.hpp"
 
+#include <QDebug>
 #include <QtCore/QEvent>
 #include <QtCore/QDir>
 
@@ -7,19 +9,33 @@
 
 ImageLoaderModel::
 ImageLoaderModel()
-  : _label(new QLabel("Double click to load image"))
+  : _label(new QLabel("Double click to load image")),
+    _checkbox(new QCheckBox("Batch Image Processing")),
+    _panel(new QWidget()),
+    _panelLayout(new QGridLayout())
 {
-  _label->setAlignment(Qt::AlignVCenter | Qt::AlignHCenter);
 
+  // display image on _label
+  _label->setParent(_panel);
+  _label->setAlignment(Qt::AlignVCenter | Qt::AlignHCenter);
   QFont f = _label->font();
   f.setBold(true);
   f.setItalic(true);
-
   _label->setFont(f);
+  //_label->setFixedSize(200, 200);
+  //_label->installEventFilter(this);
 
-  _label->setFixedSize(200, 200);
+  _checkbox->setParent(_panel);
+  _checkbox->setChecked(false);
+  _checkbox->setCheckable(true);
+  _checkbox->setEnabled(true);
 
-  _label->installEventFilter(this);
+  _panelLayout->addWidget(_label, 1, 0);
+  _panelLayout->addWidget(_checkbox, 2, 0);
+  _panel->setLayout(_panelLayout);
+  _panel->setFixedSize(200, 200);
+  _panel->installEventFilter(this);
+
 }
 
 
@@ -50,25 +66,45 @@ bool
 ImageLoaderModel::
 eventFilter(QObject *object, QEvent *event)
 {
-  if (object == _label)
+  if (object == _panel)
   {
-    int w = _label->width();
-    int h = _label->height();
+    int w = _panel->width();
+    int h = _panel->height();
 
     if (event->type() == QEvent::MouseButtonPress)
     {
 
-      QString fileName =
-        QFileDialog::getOpenFileName(nullptr,
+      if (!_checkbox->isChecked())
+      {
+        QString fileName =
+          QFileDialog::getOpenFileName(nullptr,
                                      tr("Open Image"),
                                      QDir::homePath(),
                                      tr("Image Files (*.png *.jpg *.bmp)"));
 
-      _pixmap = QPixmap(fileName);
-
-      _label->setPixmap(_pixmap.scaled(w, h, Qt::KeepAspectRatio));
-
-      Q_EMIT dataUpdated(0);
+        _pixmap = QPixmap(fileName);
+        _label->setPixmap(_pixmap.scaled(w, h, Qt::KeepAspectRatio));
+        Q_EMIT dataUpdated(0);
+      }
+      else
+      {
+        // Batch ImageLoader
+        QString img_dir =
+          QFileDialog::getExistingDirectory(nullptr,
+                                       tr("Open Image path"),
+                                       QDir::homePath(),
+                                       QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+        QDirIterator it(img_dir, QStringList() << "*.png", QDir::Files, QDirIterator::Subdirectories);
+        while (it.hasNext()) {
+          QString filename = it.next();
+          qDebug() << "image name:" << filename.toUtf8().constData();
+          _pixmap = QPixmap(filename);
+          _label->setPixmap(_pixmap.scaled(w, h, Qt::KeepAspectRatio));
+          // to avoid from freezing GUI
+          QCoreApplication::processEvents();
+          Q_EMIT dataUpdated(0);
+        }
+      }
 
       return true;
     }

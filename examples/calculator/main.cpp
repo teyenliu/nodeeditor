@@ -6,7 +6,9 @@
 
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QVBoxLayout>
+#include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QMenuBar>
+#include <QtWidgets/QPushButton>
 
 #include <nodes/DataModelRegistry>
 
@@ -93,22 +95,24 @@ main(int argc, char *argv[])
 
   QWidget mainWidget;
 
-  auto menuBar    = new QMenuBar();
-  auto saveAction = menuBar->addAction("Save..");
-  auto loadAction = menuBar->addAction("Load..");
+  auto saveButtion = new QPushButton("Save..");
+  auto loadButtion = new QPushButton("Load..");
+  QHBoxLayout *button_layout = new QHBoxLayout();
+  button_layout->addWidget(saveButtion);
+  button_layout->addWidget(loadButtion);
 
-  QVBoxLayout *l = new QVBoxLayout(&mainWidget);
-
-  l->addWidget(menuBar);
+  QVBoxLayout *l = new QVBoxLayout(&mainWidget); 
   auto scene = new FlowScene(registerDataModels(), &mainWidget);
+
+  l->addLayout(button_layout);
   l->addWidget(new FlowView(scene));
   l->setContentsMargins(0, 0, 0, 0);
   l->setSpacing(0);
 
-  QObject::connect(saveAction, &QAction::triggered,
+  QObject::connect(saveButtion, &QPushButton::clicked,
                    scene, &FlowScene::save);
 
-  QObject::connect(loadAction, &QAction::triggered,
+  QObject::connect(loadButtion, &QPushButton::clicked,
                    scene, &FlowScene::load);
 
   mainWidget.setWindowTitle("Dataflow tools: simplest calculator");

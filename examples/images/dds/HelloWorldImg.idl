@@ -1,0 +1,25 @@
+/**
+ * @addtogroup examplesdcpsHelloWorldisocpp
+ */
+/** @{*/
+/** @file */
+
+module HelloWorldImg
+{
+    struct RGB {
+        octet r;
+        octet g;
+        octet b;
+    };
+ 
+    const short SIZE_HORIZONTAL = 224;
+    const short SIZE_VERTICAL = 224;
+ 
+    struct Image {
+        long imgID;
+        string category;
+        RGB matrix[SIZE_HORIZONTAL][SIZE_VERTICAL];
+    };#pragma keylist Image imgID
+};
+
+/** @}*/

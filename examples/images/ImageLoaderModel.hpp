@@ -4,6 +4,12 @@
 
 #include <QtCore/QObject>
 #include <QtWidgets/QLabel>
+#include <QDir>
+#include <QStringList>
+#include <QDirIterator>
+#include <QApplication>
+#include <QCheckBox>
+#include <QGridLayout>
 
 #include <nodes/DataModelRegistry>
 #include <nodes/NodeDataModel>
@@ -58,7 +64,7 @@ public:
   { }
 
   QWidget *
-  embeddedWidget() override { return _label; }
+  embeddedWidget() override { return _panel; }
 
   bool
   resizable() const override { return true; }
@@ -68,9 +74,10 @@ protected:
   bool
   eventFilter(QObject *object, QEvent *event) override;
 
-private:
-
   QLabel * _label;
+  QCheckBox * _checkbox;
+  QWidget * _panel;
+  QGridLayout* _panelLayout;
 
   QPixmap _pixmap;
 };

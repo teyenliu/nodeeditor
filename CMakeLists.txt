@@ -34,11 +34,20 @@ endif()
 add_subdirectory(external)
 
 # Find the QtWidgets library
-find_package(Qt5 5.3 COMPONENTS
+set(CMAKE_PREFIX_PATH "/home/liudanny/Qt/5.13.0/gcc_64/lib/cmake")
+
+set(Qt5_DIR "${CMAKE_PREFIX_PATH}/Qt5Multimedia")
+set(Qt5_DIR "${CMAKE_PREFIX_PATH}/Qt5MultimediaWidgets")
+set(Qt5_DIR "${CMAKE_PREFIX_PATH}")
+find_package(Qt5 5.13 COMPONENTS
              Core
              Widgets
              Gui
              OpenGL)
+
+find_package(Qt5Widgets REQUIRED)
+find_package(Qt5Multimedia REQUIRED)
+find_package(Qt5MultimediaWidgets REQUIRED)
 
 qt5_add_resources(RESOURCES ./resources/resources.qrc)
 
@@ -87,12 +96,15 @@ target_include_directories(nodes
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/nodes/internal>
 )
 
+
 target_link_libraries(nodes
   PUBLIC
     Qt5::Core
     Qt5::Widgets
     Qt5::Gui
     Qt5::OpenGL
+    Qt5::Multimedia
+    Qt5::MultimediaWidgets
 )
 
 target_compile_definitions(nodes

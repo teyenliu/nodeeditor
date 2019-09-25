@@ -4,7 +4,11 @@
 
 #include <QtCore/QObject>
 #include <QtWidgets/QLabel>
-
+#include <QGridLayout>
+#include <QDialog>
+#include <QFormLayout>
+#include <QLineEdit>
+#include <QDialogButtonBox>
 #include <nodes/DataModelRegistry>
 #include <nodes/NodeDataModel>
 
@@ -25,7 +29,7 @@ public:
   ImageShowModel();
 
   virtual
-  ~ImageShowModel() {}
+  ~ImageShowModel() override {}
 
 public:
 
@@ -56,7 +60,7 @@ public:
   setInData(std::shared_ptr<NodeData> nodeData, PortIndex port) override;
 
   QWidget *
-  embeddedWidget() override { return _label; }
+  embeddedWidget() override { return _panel; }
 
   bool
   resizable() const override { return true; }
@@ -66,9 +70,10 @@ protected:
   bool
   eventFilter(QObject *object, QEvent *event) override;
 
-private:
-
   QLabel * _label;
+  QString _label_result;
+  QGridLayout* _panelLayout;
+  QWidget * _panel;
 
   std::shared_ptr<NodeData> _nodeData;
 };

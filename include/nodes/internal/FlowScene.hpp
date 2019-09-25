@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QtCore/QUuid>
+#include <QtWidgets>
 #include <QtWidgets/QGraphicsScene>
 
 #include <unordered_map>
@@ -77,6 +78,11 @@ public:
   void setNodePosition(Node& node, QPointF const& pos) const;
 
   QSizeF getNodeSize(Node const& node) const;
+
+  //Danny implementation
+  void dragEnterEvent(QGraphicsSceneDragDropEvent *event) override;
+  void dragMoveEvent(QGraphicsSceneDragDropEvent *event) override;
+  void dropEvent(QGraphicsSceneDragDropEvent *event) override;
 
 public:
 

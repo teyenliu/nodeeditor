@@ -623,6 +623,70 @@ sendConnectionDeletedToNodes(Connection const& c)
   to->nodeDataModel()->inputConnectionDeleted(c);
 }
 
+// Drag and Drop Implementation
+//------------------------------------------------------------------------------
+void
+FlowScene::
+dragEnterEvent(QGraphicsSceneDragDropEvent *event)
+{
+    if (event->mimeData()->hasFormat("application/x-dnditemdata")) {
+        //event->mimeData()->data()
+        event->accept();
+    } else {
+        event->ignore();
+    }
+}
+
+void
+FlowScene::
+dragMoveEvent(QGraphicsSceneDragDropEvent *event)
+{
+    event->accept();
+}
+
+void
+FlowScene::
+dropEvent(QGraphicsSceneDragDropEvent *event)
+{
+    if (event->mimeData()->hasFormat("application/x-dnditemdata")) {
+        QByteArray itemData = event->mimeData()->data("application/x-dnditemdata");
+        QDataStream dataStream(&itemData, QIODevice::ReadOnly);
+
+        QPixmap pixmap;
+        QPoint offset;
+        QString name;
+        dataStream >> pixmap >> offset >> name;
+
+        //QLabel *newIcon = new QLabel();
+        //newIcon->setPixmap(pixmap);
+        //newIcon->move(event->pos().x() - offset.x(), event->pos().y() - offset.y());
+        //newIcon->show();
+        //newIcon->setAttribute(Qt::WA_DeleteOnClose);
+
+        // Test model name: ImageLoaderModel
+        QString modelName = name;
+
+        auto dataModel = registry().create(modelName);
+
+        if (!dataModel)
+          throw std::logic_error(std::string("No registered model with name ") +
+                                 modelName.toLocal8Bit().data());
+
+        auto node = detail::make_unique<Node>(std::move(dataModel));
+        auto ngo  = detail::make_unique<NodeGraphicsObject>(*this, *node);
+        ngo->setX(event->pos().x() - offset.x());
+        ngo->setY(event->pos().y() - offset.y());
+        node->setGraphicsObject(std::move(ngo));
+        auto nodePtr = node.get();
+        _nodes[node->id()] = std::move(node);
+        nodePlaced(*nodePtr);
+        nodeCreated(*nodePtr);
+
+        event->accept();
+    } else {
+        event->ignore();
+    }
+}
 
 //------------------------------------------------------------------------------
 namespace QtNodes

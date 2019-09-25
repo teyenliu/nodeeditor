@@ -2,7 +2,7 @@
 
 #include <QtCore/QEvent>
 #include <QtCore/QDir>
-
+#include <QDebug>
 #include <QtWidgets/QFileDialog>
 
 #include <nodes/DataModelRegistry>
@@ -11,19 +11,22 @@
 
 ImageShowModel::
 ImageShowModel()
-  : _label(new QLabel("Image will appear here"))
+  : _label(new QLabel("Image will appear here")),
+    _panel(new QWidget()),
+    _panelLayout(new QGridLayout())
 {
   _label->setAlignment(Qt::AlignVCenter | Qt::AlignHCenter);
-
   QFont f = _label->font();
   f.setBold(true);
   f.setItalic(true);
-
   _label->setFont(f);
+  //_label->setFixedSize(200, 200);
+  //_label->installEventFilter(this);
 
-  _label->setFixedSize(200, 200);
-
-  _label->installEventFilter(this);
+  _panelLayout->addWidget(_label, 1, 0);
+  _panel->setLayout(_panelLayout);
+  _panel->setFixedSize(200, 200);
+  _panel->installEventFilter(this);
 }
 
 unsigned int
@@ -53,10 +56,10 @@ bool
 ImageShowModel::
 eventFilter(QObject *object, QEvent *event)
 {
-  if (object == _label)
+  if (object == _panel)
   {
-    int w = _label->width();
-    int h = _label->height();
+    int w = _panel->width();
+    int h = _panel->height();
 
     if (event->type() == QEvent::Resize)
     {
@@ -97,11 +100,13 @@ setInData(std::shared_ptr<NodeData> nodeData, PortIndex)
   if (_nodeData)
   {
     auto d = std::dynamic_pointer_cast<PixmapData>(_nodeData);
-
-    int w = _label->width();
-    int h = _label->height();
-
-    _label->setPixmap(d->pixmap().scaled(w, h, Qt::KeepAspectRatio));
+    // Danny Implementation
+    if(!d->pixmap().isNull())
+    {
+      int w = _panel->width();
+      int h = _panel->height();
+      _label->setPixmap(d->pixmap().scaled(w, h, Qt::KeepAspectRatio));
+    }
   }
   else
   {

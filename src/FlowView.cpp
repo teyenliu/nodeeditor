@@ -129,6 +129,7 @@ contextMenuEvent(QContextMenuEvent *event)
 
   auto *treeViewAction = new QWidgetAction(&modelMenu);
   treeViewAction->setDefaultWidget(treeView);
+  treeView->resize(360,640);
 
   modelMenu.addAction(treeViewAction);
 
@@ -145,6 +146,8 @@ contextMenuEvent(QContextMenuEvent *event)
   {
     auto parent = topLevelItems[assoc.second];
     auto item   = new QTreeWidgetItem(parent);
+    // Danny experiment
+    //item->setIcon(0, *(new QIcon("/home/liudanny/Qt/5.8/Src/qttools/src/qdoc/doc/images/happy.gif")));
     item->setText(0, assoc.first);
     item->setData(0, Qt::UserRole, assoc.first);
   }

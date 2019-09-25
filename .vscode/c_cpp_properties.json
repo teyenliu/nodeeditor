@@ -1,0 +1,21 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "/home/liudanny/Qt/5.8/gcc_64/include",
+                "/home/liudanny/git/nodeeditor/include/nodes/internal",
+                "/home/liudanny/git/nodeeditor/include/nodes",
+                "/home/liudanny/git/nodeeditor/test/include",
+                "${workspaceFolder}/**"
+                
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "clang-x64"
+        }
+    ],
+    "version": 4
+}
