@@ -34,7 +34,7 @@ endif()
 add_subdirectory(external)
 
 # Find the QtWidgets library
-set(CMAKE_PREFIX_PATH "/home/liudanny/Qt/5.13.0/gcc_64/lib/cmake")
+set(CMAKE_PREFIX_PATH "/home/liudanny/Qt/5.13.2/gcc_64/lib/cmake")
 
 set(Qt5_DIR "${CMAKE_PREFIX_PATH}/Qt5Multimedia")
 set(Qt5_DIR "${CMAKE_PREFIX_PATH}/Qt5MultimediaWidgets")

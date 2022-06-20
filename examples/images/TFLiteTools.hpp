@@ -22,18 +22,18 @@
 #include <sys/uio.h>    // NOLINT(build/include_order)
 #include <unistd.h>     // NOLINT(build/include_order)
 
-#include "tensorflow/contrib/lite/kernels/register.h"
-#include "tensorflow/contrib/lite/model.h"
-#include "tensorflow/contrib/lite/optional_debug_tools.h"
-#include "tensorflow/contrib/lite/string_util.h"
+#include "tensorflow/lite/kernels/register.h"
+#include "tensorflow/lite/model.h"
+#include "tensorflow/lite/optional_debug_tools.h"
+#include "tensorflow/lite/string_util.h"
 
-#include "tensorflow/contrib/lite/builtin_op_data.h"
-#include "tensorflow/contrib/lite/interpreter.h"
-#include "tensorflow/contrib/lite/kernels/register.h"
-#include "tensorflow/contrib/lite/string_util.h"
-#include "tensorflow/contrib/lite/version.h"
+#include "tensorflow/lite/builtin_op_data.h"
+#include "tensorflow/lite/interpreter.h"
+#include "tensorflow/lite/kernels/register.h"
+#include "tensorflow/lite/string_util.h"
+#include "tensorflow/lite/version.h"
 
-#include "tensorflow/contrib/lite/string.h"
+#include "tensorflow/lite/string.h"
 
 #include "opencv2/highgui/highgui.hpp"
 #include "opencv2/imgproc/imgproc.hpp"

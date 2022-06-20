@@ -40,11 +40,11 @@ target_link_libraries (
 )
 ###################
 
-set(OpenCV_DIR "/opt/opencv4/lib")
+#set(OpenCV_DIR "/opt/opencv4/lib")
 find_package(OpenCV 4.0 REQUIRED)
 #find_package(Eigen3 REQUIRED)
 
-set(TF_SOURCE "/home/liudanny/git/tensorflow_danny")
+set(TF_SOURCE "/home/liudanny/git/tensorflow")
 set(TF_LIBS "/usr/local/tf_libs")
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -fPIC -O3 ")
@@ -55,7 +55,7 @@ include_directories( ${OpenCV_INCLUDE_DIRS} )
 include_directories("${TF_LIBS}/include/external/nsync/public")
 include_directories("${TF_LIBS}/include")
 include_directories("${TF_SOURCE}")
-include_directories("${TF_SOURCE}/contrib/lite")
+include_directories("${TF_SOURCE}/lite")
 include_directories("${TF_SOURCE}/tensorflow/contrib/makefile/downloads/absl")
 
 #TVM Related
